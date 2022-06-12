@@ -27,7 +27,7 @@ import (
 )
 
 // global vars...gasp!
-var addr = "127.0.0.1:8000"
+var addr = "127.0.0.1:8001"
 var tracer trace.Tracer
 var httpClient http.Client
 var logger log.Logger
@@ -106,8 +106,10 @@ func initTracer() func() {
 
 	driver := otlpgrpc.NewDriver(
 		otlpgrpc.WithInsecure(),
-		otlpgrpc.WithEndpoint("tempo:55680"),
+		otlpgrpc.WithEndpoint("jaeger:4317"),
 		otlpgrpc.WithDialOption(grpc.WithBlock()), // useful for testing
+		otlpgrpc.WithDialOption(grpc.WithDisableRetry()), // useful for testing
+		
 	)
 	exp, err := otlp.NewExporter(ctx, driver)
 	handleErr(err, "failed to create exporter")
@@ -169,7 +171,7 @@ func instrumentedServer(handler http.HandlerFunc) *http.Server {
 
 	return &http.Server{
 		Handler: r,
-		Addr:    "0.0.0.0:8000",
+		Addr:    "0.0.0.0:8001",
 	}
 }
 

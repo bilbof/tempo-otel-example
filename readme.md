@@ -22,6 +22,10 @@ It includes trace discovery through Logs and Exemplars.
 
 `curl http://localhost:8000/`
 
+4.1. Send traffic
+
+fortio load -c 1 -qps 3 -t 0 http://localhost:8000
+
 5. (Optional) See OpenMetrics Exemplars.
 
 `curl -H 'Accept: application/openmetrics-text' http://localhost:8000/metrics | less`
